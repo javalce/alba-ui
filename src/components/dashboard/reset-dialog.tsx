@@ -1,3 +1,7 @@
+'use client';
+
+import { toast } from 'sonner';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,8 +13,19 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { resetDocuments } from '@/services/document';
 
 export function ResetDialog() {
+  function handleReset() {
+    resetDocuments()
+      .then(({ message }) => {
+        toast.success(message);
+      })
+      .catch(() => {
+        toast.error('Error al resetear los documentos');
+      });
+  }
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -26,7 +41,7 @@ export function ResetDialog() {
         </AlertDialogDescription>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction>Continuar</AlertDialogAction>
+          <AlertDialogAction onClick={handleReset}>Continuar</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

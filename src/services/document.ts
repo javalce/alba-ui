@@ -19,6 +19,26 @@ export async function addDocuments(files: FileList) {
 
       throw new Error(details);
     }
+
+    throw new Error('Error al subir los archivos');
+  }
+
+  return response.json() as Promise<JsonSuccess>;
+}
+
+export async function resetDocuments() {
+  const response = await fetch(`${API_URL}/api/documents/reset`, {
+    method: 'POST',
+  });
+
+  if (!response.ok) {
+    if (response.status === 500) {
+      const { details } = (await response.json()) as JsonError;
+
+      throw new Error(details);
+    }
+
+    throw new Error('Error al resetear los documentos');
   }
 
   return response.json() as Promise<JsonSuccess>;
