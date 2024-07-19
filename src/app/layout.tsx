@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <div className='flex min-h-screen flex-col'>
             <Header />
-            <main className='flex flex-1 flex-col bg-muted/50'>{children}</main>
+            <main className='flex flex-1 flex-col bg-muted/60'>{children}</main>
           </div>
         </Providers>
         <Toaster closeButton richColors position='top-right' />
