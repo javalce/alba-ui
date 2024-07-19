@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
 import { Header } from '@/components/header';
+import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 import { Providers } from '@/providers';
 import './globals.css';
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  themColor: [
+  themeColor: [
     { media: '(prefers-color-scheme: light)', color: 'white' },
     { media: '(prefers-color-scheme: dark)', color: 'black' },
   ],
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className='flex flex-1 flex-col bg-muted/50'>{children}</main>
           </div>
         </Providers>
+        <Toaster closeButton richColors position='top-right' />
       </body>
     </html>
   );

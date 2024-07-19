@@ -1,8 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useId } from 'react';
+import { useId, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -31,26 +32,42 @@ const BYTES_IN_MB = 1000000;
 const MAX_UPLOAD_SIZE = MAX_UPLOAD_SIZE_MB * BYTES_IN_MB;
 
 const formSchema = z.object({
-  file: z
-    .instanceof(FileList)
-    .refine((files) => files.length > 0, 'Debes subir al menos un archivo')
-    .refine((files) => files[0].type === 'application/pdf', 'Solo se permiten archivos PDF')
-    .refine(
-      (files) => files[0].size <= MAX_UPLOAD_SIZE,
-      (files) => {
-        const size = files[0].size / BYTES_IN_MB;
+  file: z.instanceof(FileList).superRefine((files, ctx) => {
+    if (files.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Debes subir al menos un archivo',
+        fatal: true,
+      });
 
-        return {
-          message: `El tamaño de los archivos no debe superar los ${MAX_UPLOAD_SIZE_MB.toFixed(0)}MB (${size.toFixed(1)}MB)`,
-        };
-      },
-    )
-    .optional(),
+      return z.NEVER;
+    }
+
+    const { type, size } = files[0];
+
+    if (type !== 'application/pdf') {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Solo se permiten archivos PDF',
+      });
+    }
+
+    if (size > MAX_UPLOAD_SIZE) {
+      const sizeInMb = size / BYTES_IN_MB;
+
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `El tamaño de los archivos no debe superar los ${MAX_UPLOAD_SIZE_MB.toFixed(0)}MB (${sizeInMb.toFixed(1)}MB)`,
+      });
+    }
+  }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 export function AddDocumentFormDialog() {
+  const [open, setOpen] = useState(false);
+
   const formId = useId();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -58,12 +75,20 @@ export function AddDocumentFormDialog() {
 
   const fileRef = form.register('file');
 
+  function onOpenChange(nextOpen: boolean) {
+    setOpen(() => nextOpen);
+  }
+
   function onSubmit(data: FormValues) {
     // TODO: Implementar la lógica para subir el archivo
+
+    toast.success('Archivo subido correctamente');
+    toast.error('Error al subir el archivo');
+    onOpenChange(false);
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button>Añadir</Button>
       </DialogTrigger>
