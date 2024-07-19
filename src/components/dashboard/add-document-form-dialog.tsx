@@ -26,6 +26,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { addDocuments } from '@/services/document';
 
 const MAX_UPLOAD_SIZE_MB = 5;
 const BYTES_IN_MB = 1000000;
@@ -79,12 +80,17 @@ export function AddDocumentFormDialog() {
     setOpen(() => nextOpen);
   }
 
-  function onSubmit(data: FormValues) {
-    // TODO: Implementar la lógica para subir el archivo
-
-    toast.success('Archivo subido correctamente');
-    toast.error('Error al subir el archivo');
-    onOpenChange(false);
+  function onSubmit({ file }: FormValues) {
+    addDocuments(file)
+      .then(() => {
+        toast.success('Archivo subido correctamente');
+      })
+      .catch(() => {
+        toast.error('Error al subir el archivo');
+      })
+      .finally(() => {
+        onOpenChange(false);
+      });
   }
 
   return (
