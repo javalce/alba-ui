@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className='flex flex-1 flex-col bg-muted/60'>{children}</main>
           </div>
         </Providers>
-        <Toaster closeButton richColors position='top-right' />
+        <Toaster richColors position='top-right' />
       </body>
     </html>
   );
