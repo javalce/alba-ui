@@ -1,7 +1,7 @@
 import { API_URL } from '@/constants/api';
 import { type JsonError, type JsonSuccess } from '@/types/error';
 
-export async function addDocuments(files: FileList) {
+export async function addDocuments(files: File[]) {
   const formData = new FormData();
 
   for (const file of Array.from(files)) {

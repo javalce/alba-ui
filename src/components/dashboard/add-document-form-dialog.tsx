@@ -28,40 +28,43 @@ import {
 import { Input } from '@/components/ui/input';
 import { addDocuments } from '@/services/document';
 
-const MAX_UPLOAD_SIZE_MB = 5;
+const MAX_UPLOAD_SIZE_MB = 10;
 const BYTES_IN_MB = 1000000;
 const MAX_UPLOAD_SIZE = MAX_UPLOAD_SIZE_MB * BYTES_IN_MB;
 
 const formSchema = z.object({
-  file: z.instanceof(FileList).superRefine((files, ctx) => {
-    if (files.length === 0) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Debes subir al menos un archivo',
-        fatal: true,
-      });
+  file: z
+    .unknown()
+    .transform((files) => files as FileList)
+    .superRefine((files, ctx) => {
+      if (files.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Debes subir al menos un archivo',
+          fatal: true,
+        });
 
-      return z.NEVER;
-    }
+        return z.NEVER;
+      }
 
-    const { type, size } = files[0];
+      const { type, size } = files[0];
 
-    if (type !== 'application/pdf') {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Solo se permiten archivos PDF',
-      });
-    }
+      if (type !== 'application/pdf') {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Solo se permiten archivos PDF',
+        });
+      }
 
-    if (size > MAX_UPLOAD_SIZE) {
-      const sizeInMb = size / BYTES_IN_MB;
+      if (size > MAX_UPLOAD_SIZE) {
+        const sizeInMb = size / BYTES_IN_MB;
 
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: `El tamaño de los archivos no debe superar los ${MAX_UPLOAD_SIZE_MB.toFixed(0)}MB (${sizeInMb.toFixed(1)}MB)`,
-      });
-    }
-  }),
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `El tamaño de los archivos no debe superar los ${MAX_UPLOAD_SIZE_MB.toFixed(0)}MB (${sizeInMb.toFixed(1)}MB)`,
+        });
+      }
+    }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -72,6 +75,9 @@ export function AddDocumentFormDialog() {
   const formId = useId();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      file: undefined,
+    },
   });
 
   const fileRef = form.register('file');
@@ -81,12 +87,14 @@ export function AddDocumentFormDialog() {
   }
 
   function onSubmit({ file }: FormValues) {
-    addDocuments(file)
+    const files = Array.from(file);
+
+    addDocuments(files)
       .then(() => {
-        toast.success('Archivo subido correctamente');
+        toast.info('Se enviará un correo cuando los documentos estén listos');
       })
       .catch(() => {
-        toast.error('Error al subir el archivo');
+        toast.error('Error al subir los archivos');
       })
       .finally(() => {
         onOpenChange(false);
