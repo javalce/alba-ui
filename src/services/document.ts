@@ -16,6 +16,6 @@ export async function resetDocuments() {
   return api.post('documents/reset').json<JsonSuccess>();
 }
 
-export async function getDocuments() {
-  return api.get('documents').json<Document[]>();
+export async function getDocuments(name: string) {
+  return api.get('documents', { searchParams: { name } }).json<Document[]>();
 }

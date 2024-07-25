@@ -1,23 +1,29 @@
-import { AddDocumentFormDialog } from '@/components/dashboard/add-document-form-dialog';
-import { ResetDialog } from '@/components/dashboard/reset-dialog';
-import { Input } from '@/components/ui/input';
-import { getDocuments } from '@/services/document';
+import { Suspense } from 'react';
 
-export default async function Page() {
-  const documents = await getDocuments();
+import { AddDocumentFormDialog } from '@/components/dashboard/add-document-form-dialog';
+import { DocumentList } from '@/components/dashboard/document-list';
+import { DocumentSearch } from '@/components/dashboard/document-search';
+import { ResetDialog } from '@/components/dashboard/reset-dialog';
+
+export default async function Page({
+  searchParams,
+}: {
+  searchParams?: {
+    q?: string;
+  };
+}) {
+  const query = searchParams?.q ?? '';
 
   return (
     <div className='space-y-6'>
       <section className='flex gap-x-4 px-2 py-1'>
-        <Input placeholder='Buscar documentos' type='text' />
+        <DocumentSearch />
         <AddDocumentFormDialog />
         <ResetDialog />
       </section>
-      <section className='space-y-2'>
-        {documents.map((document) => (
-          <article key={document.id}>{document.name}</article>
-        ))}
-      </section>
+      <Suspense key={query} fallback={<div>Cargando...</div>}>
+        <DocumentList query={query} />
+      </Suspense>
     </div>
   );
 }
