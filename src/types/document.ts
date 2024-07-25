@@ -40,3 +40,10 @@ export const documentFormSchema = z.object({
 });
 
 export type DocumentFormValues = z.infer<typeof documentFormSchema>;
+
+export type DocumentId = number;
+
+export interface Document {
+  id: DocumentId;
+  name: string;
+}
