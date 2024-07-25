@@ -17,5 +17,12 @@ export async function resetDocuments() {
 }
 
 export async function getDocuments(name: string) {
-  return api.get('documents', { searchParams: { name } }).json<Document[]>();
+  return api
+    .get('documents', {
+      searchParams: {
+        name,
+      },
+      cache: 'no-store',
+    })
+    .json<Document[]>();
 }
