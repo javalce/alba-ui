@@ -1,6 +1,4 @@
-import ky from 'ky';
-
-import { api, API_URL } from '@/constants/api';
+import { api } from '@/constants/api';
 import { type Document } from '@/types/document';
 import { type JsonSuccess } from '@/types/error';
 
@@ -11,12 +9,7 @@ export async function addDocuments(files: File[]) {
     formData.append('files', file);
   }
 
-  return ky
-    .post('documents', {
-      prefixUrl: API_URL,
-      body: formData,
-    })
-    .json<JsonSuccess>();
+  return api.post('documents', { body: formData }).json<JsonSuccess>();
 }
 
 export async function resetDocuments() {
