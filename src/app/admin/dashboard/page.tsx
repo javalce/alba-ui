@@ -6,8 +6,6 @@ import { DocumentSearch } from '@/components/dashboard/document-search';
 import { ReloadDocumentsButton } from '@/components/dashboard/reload-documents-button';
 import { ResetDialog } from '@/components/dashboard/reset-dialog';
 
-export const dynamic = 'force-dynamic';
-
 export default async function Page({
   searchParams,
 }: {
@@ -18,8 +16,8 @@ export default async function Page({
   const query = searchParams?.q ?? '';
 
   return (
-    <div className='space-y-6'>
-      <section className='flex gap-x-4 px-2 py-1'>
+    <div className='w-full space-y-6'>
+      <section className='flex gap-x-4'>
         <DocumentSearch />
         <ReloadDocumentsButton />
         <AddDocumentFormDialog />

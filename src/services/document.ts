@@ -22,7 +22,9 @@ export async function getDocuments(name: string) {
       searchParams: {
         name,
       },
-      cache: 'no-store',
+      next: {
+        tags: ['documents'],
+      },
     })
     .json<Document[]>();
 }
