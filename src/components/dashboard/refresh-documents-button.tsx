@@ -6,7 +6,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { refreshDocuments } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 
-export function ReloadDocumentsButton() {
+export function RefreshDocumentsButton() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
