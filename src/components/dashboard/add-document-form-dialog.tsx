@@ -1,5 +1,6 @@
 'use client';
 
+import { UploadIcon } from '@radix-ui/react-icons';
 import { useId } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -24,7 +25,9 @@ export function AddDocumentFormDialog() {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button>Añadir</Button>
+        <Button>
+          <UploadIcon className='mr-2 size-4' /> Añadir
+        </Button>
       </DialogTrigger>
       <DialogContent aria-describedby={undefined}>
         <DialogHeader>

@@ -1,5 +1,6 @@
 'use client';
 
+import { ResetIcon } from '@radix-ui/react-icons';
 import { toast } from 'sonner';
 
 import {
@@ -29,7 +30,9 @@ export function ResetDialog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant='destructive'>Resetear</Button>
+        <Button variant='destructive'>
+          <ResetIcon className='mr-2 size-4' /> Resetear
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogTitle>
