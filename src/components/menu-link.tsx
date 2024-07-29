@@ -1,9 +1,10 @@
 'use client';
 
-import { cn } from '@/lib/utils';
-import Link, { LinkProps as NextLinkProps } from 'next/link';
+import Link, { type LinkProps as NextLinkProps } from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
+
+import { cn } from '@/lib/utils';
 
 type LinkProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof NextLinkProps> &
   NextLinkProps;
