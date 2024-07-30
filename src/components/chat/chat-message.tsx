@@ -19,7 +19,7 @@ export function ChatMessage({ message }: { message: Message }) {
       </div>
       <div className='ml-4 flex-1 space-y-2 overflow-hidden px-1'>
         <MemoizedReactMarkdown
-          className='prose dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 break-words'
+          className='prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0'
           components={{
             /* eslint-disable react/no-unstable-nested-components -- required for remark plugins */
             p({ children }) {

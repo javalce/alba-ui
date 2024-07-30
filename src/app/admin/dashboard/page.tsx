@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 
 import { AddDocumentFormDialog } from '@/components/dashboard/add-document-form-dialog';
 import { DocumentList } from '@/components/dashboard/document-list';
+import { DocumentListPlaceholder } from '@/components/dashboard/document-list-placeholder';
 import { DocumentSearch } from '@/components/dashboard/document-search';
 import { ResetDialog } from '@/components/dashboard/reset-dialog';
 
@@ -22,7 +23,7 @@ export default async function Page({
         <AddDocumentFormDialog />
         <ResetDialog />
       </section>
-      <Suspense key={query} fallback={<div>Cargando...</div>}>
+      <Suspense key={query} fallback={<DocumentListPlaceholder />}>
         <DocumentList query={query} />
       </Suspense>
     </div>
