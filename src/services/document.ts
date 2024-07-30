@@ -16,15 +16,10 @@ export async function resetDocuments() {
   return api.post('documents/reset').json<JsonSuccess>();
 }
 
-export async function getDocuments(name: string) {
+export async function getDocuments(name?: string) {
   return api
     .get('documents', {
-      searchParams: {
-        name,
-      },
-      next: {
-        tags: ['documents'],
-      },
+      searchParams: name ? { name } : undefined,
     })
     .json<Document[]>();
 }

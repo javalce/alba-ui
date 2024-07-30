@@ -3,7 +3,6 @@ import { Suspense } from 'react';
 import { AddDocumentFormDialog } from '@/components/dashboard/add-document-form-dialog';
 import { DocumentList } from '@/components/dashboard/document-list';
 import { DocumentSearch } from '@/components/dashboard/document-search';
-import { RefreshDocumentsButton } from '@/components/dashboard/refresh-documents-button';
 import { ResetDialog } from '@/components/dashboard/reset-dialog';
 
 export default async function Page({
@@ -19,7 +18,7 @@ export default async function Page({
     <div className='w-full space-y-6'>
       <section className='flex gap-x-4'>
         <DocumentSearch />
-        <RefreshDocumentsButton />
+        {/* <RefreshDocumentsButton /> */}
         <AddDocumentFormDialog />
         <ResetDialog />
       </section>

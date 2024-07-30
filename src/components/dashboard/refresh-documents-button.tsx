@@ -1,20 +1,15 @@
 'use client';
 
 import { ReloadIcon } from '@radix-ui/react-icons';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-import { refreshDocuments } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 
 export function RefreshDocumentsButton() {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const router = useRouter();
 
   async function handleRefreshDocuments() {
-    const params = new URLSearchParams(searchParams);
-    const url = `${pathname}?${params.toString()}`;
-
-    refreshDocuments(url);
+    router.refresh();
   }
 
   return (

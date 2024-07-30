@@ -1,6 +1,6 @@
 import { getDocuments } from '@/services/document';
 
-export async function DocumentList({ query }: { query: string }) {
+export async function DocumentList({ query }: { query?: string }) {
   const documents = await getDocuments(query);
 
   return (

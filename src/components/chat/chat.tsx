@@ -9,6 +9,7 @@ import { ChatList } from './chat-list';
 import { ChatPanel } from './chat-panel';
 import { EmptyScreen } from './empty-screen';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- This is a placeholder for the initial messages
 const initialMessages: Message[] = [
   {
     role: 'user',
