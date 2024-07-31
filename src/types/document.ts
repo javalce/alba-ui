@@ -1,3 +1,5 @@
+import { type UUID } from 'node:crypto';
+
 import { z } from 'zod';
 
 export const MAX_UPLOAD_SIZE_MB = 10;
@@ -41,9 +43,10 @@ export const documentFormSchema = z.object({
 
 export type DocumentFormValues = z.infer<typeof documentFormSchema>;
 
-export type DocumentId = number;
+export type DocumentId = UUID;
 
 export interface Document {
   id: DocumentId;
   name: string;
+  total: number;
 }

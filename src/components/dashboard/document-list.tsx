@@ -16,12 +16,14 @@ export async function DocumentList({ query }: { query?: string }) {
       <TableHeader>
         <TableRow>
           <TableHead>Nombre</TableHead>
+          <TableHead>Total decretos</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {documents.map((document) => (
           <TableRow key={document.id}>
             <TableCell>{document.name}</TableCell>
+            <TableCell>{document.total}</TableCell>
           </TableRow>
         ))}
       </TableBody>
