@@ -20,6 +20,7 @@ export async function getDocuments(name?: string) {
   return api
     .get('documents', {
       searchParams: name ? { name } : undefined,
+      cache: 'no-store',
     })
     .json<Document[]>();
 }
