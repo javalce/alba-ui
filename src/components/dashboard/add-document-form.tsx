@@ -32,9 +32,7 @@ export function AddDocumentForm({
   const fileRef = form.register('file');
 
   function onSubmit({ file }: DocumentFormValues) {
-    const files = Array.from(file);
-
-    addDocuments(files)
+    addDocuments(file.item(0)!)
       .then(() => {
         toast.info('Se enviará un correo cuando los documentos estén listos');
       })

@@ -14,7 +14,7 @@ export const documentFormSchema = z.object({
       if (files.length === 0) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: 'Debes subir al menos un archivo',
+          message: 'Debes subir un archivo',
           fatal: true,
         });
 
