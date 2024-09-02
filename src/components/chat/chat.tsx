@@ -26,7 +26,7 @@ const initialMessages: Message[] = [
 
 export function Chat({ className }: { className?: string }) {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
-    api: `${API_URL}/api/chat`,
+    api: `${API_URL}/chat`,
     streamMode: 'text',
     // initialMessages,
   });
