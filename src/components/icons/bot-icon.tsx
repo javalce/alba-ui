@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
+import { type IconProps } from '@/types/icon';
 
-export function BotIcon({ className, ...props }: React.ComponentProps<'svg'>) {
+export function BotIcon({ className, ...props }: IconProps) {
   return (
     <svg
       className={cn('size-4', className)}

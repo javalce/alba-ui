@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
+import { type IconProps } from '@/types/icon';
 
-export function UserIcon({ className, ...props }: React.ComponentProps<'svg'>) {
+export function UserIcon({ className, ...props }: IconProps) {
   return (
     <svg
       className={cn('size-4', className)}
