@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { submitLoginForm } from '@/app/actions';
@@ -16,11 +16,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { type User, userSchema } from '@/types/user';
+import { type UserSchema, userSchema } from '@/types/user';
 
 export function LoginForm() {
-  const [isLoading, setIsLoading] = useState(false);
-  const form = useForm<User>({
+  const [isPending, startTransition] = useTransition();
+  const form = useForm<UserSchema>({
     resolver: zodResolver(userSchema),
     defaultValues: {
       username: '',
@@ -28,11 +28,9 @@ export function LoginForm() {
     },
   });
 
-  function onSubmit(values: User) {
-    setIsLoading(true);
-
-    submitLoginForm(values).then(() => {
-      setIsLoading(false);
+  function onSubmit(values: UserSchema) {
+    startTransition(async () => {
+      await submitLoginForm(values);
     });
   }
 
@@ -66,8 +64,8 @@ export function LoginForm() {
               </FormItem>
             )}
           />
-          <Button className='w-full' disabled={isLoading}>
-            {isLoading ? <SpinnerIcon className='mr-2 animate-spin' /> : null}
+          <Button className='w-full' disabled={isPending}>
+            {isPending ? <SpinnerIcon className='mr-2 animate-spin' /> : null}
             Iniciar sesión
           </Button>
         </form>

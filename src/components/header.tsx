@@ -12,7 +12,7 @@ export async function Header() {
         Alba
       </Link>
       <section className='flex items-center justify-center gap-x-3'>
-        {session?.user ? (
+        {session !== null ? (
           <MenuLink href='/admin/dashboard'>Dashboard</MenuLink>
         ) : (
           <MenuLink href='/login'>Login</MenuLink>
