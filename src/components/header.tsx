@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { auth } from '@/auth';
 import { MenuLink } from '@/components/menu-link';
 
+import { LogoutButton } from './auth/logout-button';
+
 export async function Header() {
   const session = await auth();
 
@@ -13,7 +15,10 @@ export async function Header() {
       </Link>
       <section className='flex items-center justify-center gap-x-3'>
         {session !== null ? (
-          <MenuLink href='/admin/dashboard'>Dashboard</MenuLink>
+          <>
+            <MenuLink href='/admin/dashboard'>Dashboard</MenuLink>
+            <LogoutButton />
+          </>
         ) : (
           <MenuLink href='/login'>Login</MenuLink>
         )}

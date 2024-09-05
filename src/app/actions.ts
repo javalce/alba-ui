@@ -3,7 +3,7 @@
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import { signIn } from '@/auth';
+import { signIn, signOut } from '@/auth';
 import { type UserSchema } from '@/types/user';
 
 export async function refreshDocuments(url: string) {
@@ -12,5 +12,9 @@ export async function refreshDocuments(url: string) {
 }
 
 export async function submitLoginForm(formData: UserSchema) {
-  await signIn('credentials', { ...formData, redirectTo: '/admin/dashboard' });
+  return signIn('credentials', { ...formData, redirectTo: '/admin/dashboard' });
+}
+
+export async function logout() {
+  return signOut({ redirectTo: '/' });
 }
