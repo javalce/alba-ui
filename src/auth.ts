@@ -36,12 +36,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- user can be undefined
       if (user) {
         token.accessToken = user.accessToken;
+        token.refreshToken = user.refreshToken;
       }
 
       return token;
     },
     session: async ({ session, token }) => {
       session.accessToken = token.accessToken;
+      session.refreshToken = token.refreshToken;
 
       return session;
     },

@@ -1,8 +1,7 @@
-// eslint-disable-next-line import/no-cycle -- auth is imported in api
 import { api } from '@/constants/api';
 import { type LoginResponse } from '@/types/auth';
 
-export function login(username: string, password: string) {
+export async function login(username: string, password: string) {
   const data = new FormData();
 
   data.append('username', username);
@@ -13,4 +12,8 @@ export function login(username: string, password: string) {
       body: data,
     })
     .json<LoginResponse>();
+}
+
+export async function refreshToken() {
+  return api.get('auth/refresh').json<{ accessToken: string; tokenType: string }>();
 }
