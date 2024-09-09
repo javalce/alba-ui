@@ -1,18 +1,17 @@
 import { type UUID } from 'node:crypto';
 
 import { api } from '@/lib/api-client';
-import { type JsonSuccess } from '@/types/error';
 
 export async function addDocuments(file: File) {
   const formData = new FormData();
 
   formData.append('file', file);
 
-  return api.post('documents', { body: formData }).json<JsonSuccess>();
+  return api.post('documents', { body: formData }).json<{ message: string }>();
 }
 
 export async function resetDocuments() {
-  return api.post('documents/reset').json<JsonSuccess>();
+  return api.post('documents/reset').json<{ message: string }>();
 }
 
 export async function getDocuments(name?: string) {
