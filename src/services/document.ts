@@ -1,5 +1,6 @@
-import { api } from '@/constants/api';
-import { type Document } from '@/types/document';
+import { type UUID } from 'node:crypto';
+
+import { api } from '@/lib/api-client';
 import { type JsonSuccess } from '@/types/error';
 
 export async function addDocuments(file: File) {
@@ -20,5 +21,5 @@ export async function getDocuments(name?: string) {
       searchParams: name ? { name } : undefined,
       cache: 'no-store',
     })
-    .json<Document[]>();
+    .json<{ id: UUID; name: string; total: string }[]>();
 }
