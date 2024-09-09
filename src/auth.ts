@@ -1,10 +1,9 @@
-import { jwtDecode } from 'jwt-decode';
+import ky from 'ky';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
-import { isTokenExpired } from '@/lib/utils';
-// eslint-disable-next-line import/no-cycle -- auth is imported in api
-import { login, refreshToken } from '@/services/auth';
+import { API_URL } from '@/constants/api';
+import { isTokenExpired, requestToSnakeCase, responseToCamelCase } from '@/lib/utils';
 import { userSchema } from '@/types/user';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -18,7 +17,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         try {
           const { username, password } = await userSchema.parseAsync(credentials);
 
-          const { accessToken, refreshToken } = await login(username, password);
+          const data = new FormData();
+
+          data.append('username', username);
+          data.append('password', password);
+
+          const { accessToken, refreshToken } = await ky
+            .post('auth/login', {
+              prefixUrl: API_URL,
+              body: data,
+              hooks: {
+                beforeRequest: [requestToSnakeCase],
+                afterResponse: [responseToCamelCase],
+              },
+            })
+            .json<{ accessToken: string; refreshToken: string; tokenType: string }>();
 
           return {
             name: username,
@@ -35,52 +48,44 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     authorized: async ({ auth }) => {
       if (auth === null) return false;
 
-      const expiresAt = Date.parse(auth.expires);
+      const { accessToken } = auth;
 
-      return expiresAt > Date.now();
+      if (!accessToken) return false;
+
+      return !isTokenExpired(accessToken);
     },
-    jwt: async ({ token, user }) => {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- user can be undefined
-      if (user) {
+    jwt: async ({ token, user, account }) => {
+      if (account?.provider === 'credentials') {
         return {
           ...token,
           accessToken: user.accessToken,
           refreshToken: user.refreshToken,
         };
-      }
-
-      if (!token.accessToken) {
-        return token;
-      }
-
-      if (token.accessToken && !isTokenExpired(token.accessToken)) {
+      } else if (token.accessToken && !isTokenExpired(token.accessToken)) {
         return token;
       }
 
       if (!token.refreshToken) throw new TypeError('Missing refreshToken');
 
-      try {
-        const { accessToken } = await refreshToken();
+      const { accessToken } = await ky
+        .get('auth/refresh', {
+          prefixUrl: API_URL,
+          headers: {
+            Authorization: `Bearer ${token.refreshToken}`,
+          },
+          hooks: {
+            afterResponse: [responseToCamelCase],
+          },
+        })
+        .json<{ accessToken: string; tokenType: string }>();
 
-        token.accessToken = accessToken;
-      } catch (error) {
-        // eslint-disable-next-line no-console -- error is logged
-        console.error('Error refreshing access token', error);
-      }
+      token.accessToken = accessToken;
 
       return token;
     },
     session: async ({ session, token }) => {
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
-
-      if (session.accessToken) {
-        const expiresAt = jwtDecode(session.accessToken).exp!;
-        const date = new Date(0);
-
-        date.setUTCSeconds(expiresAt);
-        session.expires = date as Date & string;
-      }
 
       return session;
     },
