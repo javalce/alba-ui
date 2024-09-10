@@ -5,8 +5,8 @@ import { type Message, useChat } from 'ai/react';
 import { API_URL } from '@/constants/api';
 import { cn } from '@/lib/utils';
 
+import { ChatInput } from './chat-input';
 import { ChatList } from './chat-list';
-import { ChatPanel } from './chat-panel';
 import { EmptyScreen } from './empty-screen';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- This is a placeholder for the initial messages
@@ -37,7 +37,15 @@ export function Chat({ className }: { className?: string }) {
         {messages.length ? <ChatList messages={messages} /> : <EmptyScreen />}
         {/* <div className='h-px w-full' /> */}
       </div>
-      <ChatPanel handleInputChange={handleInputChange} handleSubmit={handleSubmit} input={input} />
+      <div className='fixed inset-x-0 bottom-0 w-full'>
+        <div className='mx-auto sm:max-w-2xl sm:p-4'>
+          <ChatInput
+            handleInputChange={handleInputChange}
+            handleSubmit={handleSubmit}
+            input={input}
+          />
+        </div>
+      </div>
     </div>
   );
 }

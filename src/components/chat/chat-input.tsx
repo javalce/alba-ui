@@ -1,5 +1,3 @@
-'use client';
-
 import Textarea from 'react-textarea-autosize';
 
 import { SendIcon } from '@/components/icons/send-icon';
