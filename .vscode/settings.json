@@ -23,5 +23,6 @@
   "files.associations": {
     "*.css": "tailwindcss",
     "*.svg": "html"
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
