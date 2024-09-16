@@ -7,6 +7,7 @@ import { isTokenExpired, requestToSnakeCase, responseToCamelCase } from '@/lib/u
 import { userSchema } from '@/types/user';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
   providers: [
     Credentials({
       credentials: {
