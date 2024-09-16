@@ -1,0 +1,16 @@
+services:
+  alba:
+    container_name: alba
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: alba
+    restart: always
+    ports:
+      - 3001:3000
+    networks:
+      - alba_ui
+
+networks:
+  alba_ui:
+    name: alba_ui
