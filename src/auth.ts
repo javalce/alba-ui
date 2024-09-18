@@ -6,7 +6,7 @@ import { API_URL } from '@/constants/api';
 import { isTokenExpired, requestToSnakeCase, responseToCamelCase } from '@/lib/utils';
 import { userSchema } from '@/types/user';
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const { signIn, signOut, auth } = NextAuth({
   trustHost: true,
   providers: [
     Credentials({
@@ -15,33 +15,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: {},
       },
       authorize: async (credentials) => {
-        try {
-          const { username, password } = await userSchema.parseAsync(credentials);
+        const parsedCredentials = await userSchema.safeParseAsync(credentials);
 
-          const data = new FormData();
+        if (!parsedCredentials.success) return null;
 
-          data.append('username', username);
-          data.append('password', password);
+        const { username, password } = parsedCredentials.data;
 
-          const { accessToken, refreshToken } = await ky
-            .post('auth/login', {
-              prefixUrl: API_URL,
-              body: data,
-              hooks: {
-                beforeRequest: [requestToSnakeCase],
-                afterResponse: [responseToCamelCase],
-              },
-            })
-            .json<{ accessToken: string; refreshToken: string; tokenType: string }>();
+        const data = new FormData();
 
-          return {
-            name: username,
-            accessToken,
-            refreshToken,
-          };
-        } catch (error) {
-          return null;
-        }
+        data.append('username', username);
+        data.append('password', password);
+
+        const { accessToken, refreshToken } = await ky
+          .post('auth/login', {
+            prefixUrl: API_URL,
+            body: data,
+            hooks: {
+              beforeRequest: [requestToSnakeCase],
+              afterResponse: [responseToCamelCase],
+            },
+          })
+          .json<{ accessToken: string; refreshToken: string; tokenType: string }>();
+
+        return {
+          name: username,
+          accessToken,
+          refreshToken,
+        };
       },
     }),
   ],
@@ -95,7 +95,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: 'jwt',
   },
   secret: process.env.AUTH_SECRET,
-  pages: {
-    signIn: '/login',
-  },
 });

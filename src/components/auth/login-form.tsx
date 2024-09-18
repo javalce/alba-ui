@@ -30,7 +30,12 @@ export function LoginForm() {
 
   function onSubmit(values: UserSchema) {
     startTransition(async () => {
-      await submitLoginForm(values);
+      const result = await submitLoginForm(values);
+
+      if (result) {
+        form.reset();
+        form.setError('root', { type: '400', message: result.message });
+      }
     });
   }
 
@@ -38,6 +43,9 @@ export function LoginForm() {
     <div className='container flex flex-1 items-center justify-center'>
       <Form {...form}>
         <form className='space-y-4' onSubmit={form.handleSubmit(onSubmit)}>
+          {form.formState.errors.root ? (
+            <FormMessage>{form.formState.errors.root.message}</FormMessage>
+          ) : null}
           <FormField
             control={form.control}
             name='username'

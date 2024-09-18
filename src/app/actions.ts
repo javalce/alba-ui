@@ -1,5 +1,6 @@
 'use server';
 
+import { AuthError } from 'next-auth';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -12,7 +13,21 @@ export async function refreshDocuments(url: string) {
 }
 
 export async function submitLoginForm(formData: UserSchema) {
-  return signIn('credentials', { ...formData, redirectTo: '/admin/dashboard' });
+  try {
+    await signIn('credentials', { ...formData, redirectTo: '/admin/dashboard' });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      if (error.type === 'CredentialsSignin') {
+        return {
+          message: 'Usuario o contraseña incorrectos',
+        };
+      }
+
+      return {
+        message: 'Error desconocido',
+      };
+    }
+  }
 }
 
 export async function logout() {
