@@ -1,35 +1,29 @@
 'use server';
 
 import { AuthError } from 'next-auth';
-import { revalidateTag } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 import { signIn, signOut } from '@/auth';
 import { type UserSchema } from '@/types/user';
 
-export async function refreshDocuments(url: string) {
-  revalidateTag('documents');
-  redirect(url);
-}
-
-export async function submitLoginForm(formData: UserSchema) {
+export async function authenticate(values: UserSchema) {
   try {
-    await signIn('credentials', { ...formData, redirectTo: '/admin/dashboard' });
+    await signIn('credentials', {
+      ...values,
+      redirectTo: '/admin/dashboard',
+    });
   } catch (error) {
     if (error instanceof AuthError) {
-      if (error.type === 'CredentialsSignin') {
-        return {
-          message: 'Usuario o contraseña incorrectos',
-        };
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return { error: 'Credenciales incorrectas' };
+        default:
+          return { error: 'Error desconocido' };
       }
-
-      return {
-        message: 'Error desconocido',
-      };
     }
+    throw error;
   }
 }
 
 export async function logout() {
-  return signOut({ redirectTo: '/' });
+  await signOut({ redirectTo: '/' });
 }

@@ -6,7 +6,7 @@ import { API_URL } from '@/constants/api';
 import { isTokenExpired, requestToSnakeCase, responseToCamelCase } from '@/lib/utils';
 import { userSchema } from '@/types/user';
 
-export const { signIn, signOut, auth } = NextAuth({
+export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
   providers: [
     Credentials({
@@ -15,33 +15,37 @@ export const { signIn, signOut, auth } = NextAuth({
         password: {},
       },
       authorize: async (credentials) => {
-        const parsedCredentials = await userSchema.safeParseAsync(credentials);
+        try {
+          const { username, password } = await userSchema.parseAsync(credentials);
 
-        if (!parsedCredentials.success) return null;
+          const data = new URLSearchParams();
 
-        const { username, password } = parsedCredentials.data;
+          data.set('username', username);
+          data.set('password', password);
 
-        const data = new FormData();
+          const { accessToken, refreshToken } = await ky
+            .post('auth/login', {
+              prefixUrl: API_URL,
+              body: data,
+              hooks: {
+                beforeRequest: [requestToSnakeCase],
+                afterResponse: [responseToCamelCase],
+              },
+            })
+            .json<{
+              accessToken: string;
+              refreshToken: string;
+              tokenType: string;
+            }>();
 
-        data.append('username', username);
-        data.append('password', password);
-
-        const { accessToken, refreshToken } = await ky
-          .post('auth/login', {
-            prefixUrl: API_URL,
-            body: data,
-            hooks: {
-              beforeRequest: [requestToSnakeCase],
-              afterResponse: [responseToCamelCase],
-            },
-          })
-          .json<{ accessToken: string; refreshToken: string; tokenType: string }>();
-
-        return {
-          name: username,
-          accessToken,
-          refreshToken,
-        };
+          return {
+            name: username,
+            accessToken,
+            refreshToken,
+          };
+        } catch (error) {
+          return null;
+        }
       },
     }),
   ],
@@ -95,4 +99,7 @@ export const { signIn, signOut, auth } = NextAuth({
     strategy: 'jwt',
   },
   secret: process.env.AUTH_SECRET,
+  pages: {
+    signIn: '/login',
+  },
 });

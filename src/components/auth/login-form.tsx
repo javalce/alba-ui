@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { submitLoginForm } from '@/app/actions';
+import { authenticate } from '@/app/actions';
 import { SpinnerIcon } from '@/components/icons/spinner-icon';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,22 +19,25 @@ import { Input } from '@/components/ui/input';
 import { type UserSchema, userSchema } from '@/types/user';
 
 export function LoginForm() {
-  const [isPending, startTransition] = useTransition();
   const form = useForm<UserSchema>({
     resolver: zodResolver(userSchema),
+    mode: 'onSubmit',
     defaultValues: {
       username: '',
       password: '',
     },
   });
+  const [isPending, startTransition] = useTransition();
 
   function onSubmit(values: UserSchema) {
     startTransition(async () => {
-      const result = await submitLoginForm(values);
+      const res = await authenticate(values);
 
-      if (result) {
-        form.reset();
-        form.setError('root', { type: '400', message: result.message });
+      if (res?.error) {
+        form.setError('root', {
+          type: 'manual',
+          message: res.error,
+        });
       }
     });
   }

@@ -20,7 +20,11 @@ export function isTokenExpired(token: string): boolean {
 
 export const requestToSnakeCase = ((): BeforeRequestHook => {
   return async (request, options) => {
-    if (options.body && !(options.body instanceof FormData)) {
+    if (
+      options.body &&
+      !(options.body instanceof FormData) &&
+      !(options.body instanceof URLSearchParams)
+    ) {
       const body = JSON.parse(options.body as never) as object;
       const convertedBody = decamelizeKeys(body);
 
@@ -31,9 +35,13 @@ export const requestToSnakeCase = ((): BeforeRequestHook => {
 
 export const responseToCamelCase = ((): AfterResponseHook => {
   return async (request, options, response) => {
-    const data = await response.json();
-    const convertedBody = camelizeKeys(data);
+    try {
+      const data = await response.json();
+      const convertedBody = camelizeKeys(data);
 
-    return new Response(JSON.stringify(convertedBody), response);
+      return new Response(JSON.stringify(convertedBody), response);
+    } catch (error) {
+      /* empty */
+    }
   };
 })();
