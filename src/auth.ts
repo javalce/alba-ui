@@ -102,4 +102,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: '/login',
   },
+  basePath: process.env.NODE_ENV === 'production' ? '/alba/api/auth' : '/api/auth',
 });
