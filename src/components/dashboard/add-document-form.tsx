@@ -20,7 +20,7 @@ const BYTES_IN_MB = 1000000;
 const MAX_UPLOAD_SIZE = MAX_UPLOAD_SIZE_MB * BYTES_IN_MB;
 
 const documentFormSchema = z.object({
-  file: z
+  files: z
     .unknown()
     .transform((files) => files as FileList)
     .superRefine((files, ctx) => {
@@ -66,14 +66,14 @@ export function AddDocumentForm({
   const form = useForm<DocumentFormValues>({
     resolver: zodResolver(documentFormSchema),
     defaultValues: {
-      file: undefined,
+      files: undefined,
     },
   });
 
-  const fileRef = form.register('file');
+  const fileRef = form.register('files');
 
-  function onSubmit({ file }: DocumentFormValues) {
-    addDocuments(file.item(0)!)
+  function onSubmit({ files }: DocumentFormValues) {
+    addDocuments(files[0])
       .then(() => {
         toast.info('Se enviará un correo cuando los documentos estén listos');
       })
@@ -90,7 +90,7 @@ export function AddDocumentForm({
       <form className='space-y-8' id={formId} onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
-          name='file'
+          name='files'
           render={() => (
             <FormItem>
               <FormLabel>Documentos</FormLabel>

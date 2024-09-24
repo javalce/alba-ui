@@ -16,11 +16,7 @@ export const api = ky.create({
         const session = isServer ? await auth() : await getSession();
 
         if (session?.accessToken) {
-          return new Request(request, {
-            headers: {
-              Authorization: `Bearer ${session.accessToken}`,
-            },
-          });
+          request.headers.set('Authorization', `Bearer ${session.accessToken}`);
         }
       },
       requestToSnakeCase,
