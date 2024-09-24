@@ -1,6 +1,7 @@
 'use server';
 
 import { AuthError } from 'next-auth';
+import { redirect } from 'next/navigation';
 
 import { signIn, signOut } from '@/auth';
 import { type UserSchema } from '@/types/user';
@@ -9,8 +10,9 @@ export async function authenticate(values: UserSchema) {
   try {
     await signIn('credentials', {
       ...values,
-      redirectTo: '/admin/dashboard',
+      redirect: false,
     });
+    redirect('/admin/dashboard');
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -25,5 +27,6 @@ export async function authenticate(values: UserSchema) {
 }
 
 export async function logout() {
-  await signOut({ redirectTo: '/' });
+  await signOut({ redirect: false });
+  redirect('/');
 }
