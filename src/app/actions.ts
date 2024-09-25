@@ -3,7 +3,7 @@
 import { AuthError } from 'next-auth';
 import { redirect } from 'next/navigation';
 
-import { signIn, signOut } from '@/auth';
+import { auth, signIn, signOut } from '@/auth';
 import { type UserSchema } from '@/types/user';
 
 export async function authenticate(values: UserSchema) {
@@ -29,4 +29,8 @@ export async function authenticate(values: UserSchema) {
 export async function logout() {
   await signOut({ redirect: false });
   redirect('/');
+}
+
+export async function getSession() {
+  return auth();
 }

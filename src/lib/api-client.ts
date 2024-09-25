@@ -1,8 +1,7 @@
 import ky from 'ky';
-import { getSession } from 'next-auth/react';
 
-import { auth } from '@/auth';
-import { API_URL } from '@/constants/api';
+import { getSession } from '@/app/actions';
+import { API_URL } from '@/constants';
 
 import { requestToSnakeCase, responseToCamelCase } from './utils';
 
@@ -11,9 +10,7 @@ export const api = ky.create({
   hooks: {
     beforeRequest: [
       async (request, _) => {
-        const isServer = typeof window === 'undefined';
-
-        const session = isServer ? await auth() : await getSession();
+        const session = await getSession();
 
         if (session?.accessToken) {
           request.headers.set('Authorization', `Bearer ${session.accessToken}`);
