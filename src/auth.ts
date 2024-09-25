@@ -2,7 +2,7 @@ import ky from 'ky';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
-import { API_URL } from '@/constants/api';
+import { API_URL } from '@/constants';
 import { isTokenExpired, requestToSnakeCase, responseToCamelCase } from '@/lib/utils';
 import { userSchema } from '@/types/user';
 

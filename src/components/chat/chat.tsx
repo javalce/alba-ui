@@ -2,7 +2,7 @@
 
 import { useChat } from 'ai/react';
 
-import { API_URL } from '@/constants/api';
+import { API_URL } from '@/constants';
 import { cn } from '@/lib/utils';
 
 import { ChatInput } from './chat-input';
