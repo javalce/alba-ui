@@ -1,6 +1,7 @@
 'use client';
 
 import { useChat } from 'ai/react';
+import { toast } from 'sonner';
 
 import { API_URL } from '@/constants';
 import { cn } from '@/lib/utils';
@@ -13,6 +14,9 @@ export function Chat({ className }: { className?: string }) {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: `${API_URL}/chat`,
     streamMode: 'text',
+    onError: (err) => {
+      toast.error(err.message);
+    },
   });
 
   return (
