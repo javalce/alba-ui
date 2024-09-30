@@ -1,10 +1,11 @@
 import { type Message } from 'ai';
 
+import { ChatLoader } from '@/components/chat/chat-loader';
 import { Separator } from '@/components/ui/separator';
 
 import { ChatMessage } from './chat-message';
 
-export function ChatList({ messages }: { messages: Message[] }) {
+export function ChatList({ messages, isLoading }: { messages: Message[]; isLoading: boolean }) {
   if (!messages.length) {
     return null;
   }
@@ -17,6 +18,7 @@ export function ChatList({ messages }: { messages: Message[] }) {
           {index < messages.length - 1 && <Separator className='my-4' />}
         </div>
       ))}
+      {isLoading ? <ChatLoader text='Generando respuesta' /> : null}
     </div>
   );
 }
