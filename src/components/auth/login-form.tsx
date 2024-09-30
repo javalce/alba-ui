@@ -33,7 +33,7 @@ export function LoginForm() {
     startTransition(async () => {
       const res = await authenticate(values);
 
-      if (res?.error) {
+      if (res.error) {
         form.setError('root', {
           type: 'manual',
           message: res.error,
