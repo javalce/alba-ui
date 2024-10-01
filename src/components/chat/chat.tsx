@@ -13,6 +13,7 @@ import { EmptyScreen } from './empty-screen';
 export function Chat({ className }: { className?: string }) {
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
     api: `${API_URL}/chat`,
+    streamProtocol: 'text',
     onError: (err) => {
       toast.error(err.message);
     },
@@ -21,7 +22,11 @@ export function Chat({ className }: { className?: string }) {
   return (
     <div className='w-full overflow-auto pl-0'>
       <div className={cn('pb-[200px] pt-4 md:pt-10', className)}>
-        {messages.length ? <ChatList isLoading={isLoading} messages={messages} /> : <EmptyScreen />}
+        {messages.length > 0 ? (
+          <ChatList isLoading={isLoading} messages={messages} />
+        ) : (
+          <EmptyScreen />
+        )}
         {/* <div className='h-px w-full' /> */}
       </div>
       <div className='fixed inset-x-0 bottom-0 w-full'>
