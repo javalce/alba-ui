@@ -55,6 +55,7 @@
     "autoprefixer": "10.4.20",
     "eslint": "8.57.1",
     "happy-dom": "15.7.4",
+    "msw": "2.4.9",
     "postcss": "8.4.47",
     "prettier": "3.3.3",
     "prettier-plugin-tailwindcss": "0.6.8",
