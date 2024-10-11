@@ -13,6 +13,7 @@ import { EmptyScreen } from './empty-screen';
 export function Chat({ className }: { className?: string }) {
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
     api: `${API_URL}/chat`,
+    streamProtocol: 'text',
     onError: (err) => {
       toast.error(err.message);
     },
