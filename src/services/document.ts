@@ -19,6 +19,9 @@ export async function getDocuments(name?: string) {
     .get('documents', {
       searchParams: name ? { name } : undefined,
       cache: 'no-store',
+      next: {
+        tags: ['documents'],
+      },
     })
     .json<{ id: UUID; name: string; total: string }[]>();
 }

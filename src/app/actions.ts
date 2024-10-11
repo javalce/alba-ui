@@ -1,6 +1,7 @@
 'use server';
 
 import { AuthError } from 'next-auth';
+import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { auth, signIn, signOut } from '@/auth';
@@ -33,4 +34,8 @@ export async function logout() {
 
 export async function getSession() {
   return auth();
+}
+
+export async function refreshDocuments() {
+  revalidateTag('documents');
 }

@@ -3,6 +3,7 @@
 import { ResetIcon } from '@radix-ui/react-icons';
 import { toast } from 'sonner';
 
+import { refreshDocuments } from '@/app/actions';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,6 +25,9 @@ export function ResetDialog() {
       })
       .catch(() => {
         toast.error('Error al resetear los documentos');
+      })
+      .finally(() => {
+        refreshDocuments();
       });
   }
 
