@@ -26,7 +26,7 @@ export function Chat() {
       <div className='mt-10 flex flex-col items-center justify-between gap-4'>
         <div
           ref={containerRef}
-          className='flex h-full w-dvw flex-col items-center gap-4 overflow-y-scroll'
+          className='flex h-full w-dvw flex-col items-center gap-4 overflow-y-auto'
         >
           {messages.length > 0 ? (
             <ChatList isLoading={isLoading} messages={messages} />
