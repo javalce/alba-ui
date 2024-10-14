@@ -9,7 +9,11 @@ export function ChatInput({ input, handleInputChange, handleSubmit }: ChatInputP
   const { formRef, onKeyDown } = useEnterSubmit();
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit}>
+    <form
+      ref={formRef}
+      className='max-w-[calc(100dvw-32px) relative flex flex-row items-end gap-2 px-4 md:min-w-[600px] md:px-0'
+      onSubmit={handleSubmit}
+    >
       <div className='relative flex max-h-60 w-full grow flex-col justify-center overflow-hidden bg-background pr-10 sm:rounded-md sm:border sm:pr-12'>
         <Textarea
           autoComplete='off'
@@ -24,15 +28,10 @@ export function ChatInput({ input, handleInputChange, handleSubmit }: ChatInputP
           onKeyDown={onKeyDown}
         />
         <div className='absolute bottom-4 top-[13px] sm:right-3'>
-          {/* <Tooltip>
-                <TooltipTrigger asChild> */}
           <Button disabled={input === ''} size='icon' type='submit'>
             <SendIcon className='size-5' />
             <span className='sr-only'>Enviar mensaje</span>
           </Button>
-          {/* </TooltipTrigger>
-                <TooltipContent>Send message</TooltipContent>
-                </Tooltip> */}
         </div>
       </div>
     </form>

@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 
 export function ChatMessage({ message }: { message: Message }) {
   return (
-    <div className={cn('group relative mb-4 flex items-start md:-ml-12')}>
+    <div className='group relative mb-4 flex items-start md:-ml-12'>
       <div
         className={cn(
           'flex size-8 shrink-0 select-none items-center justify-center rounded-md border shadow',

@@ -10,7 +10,7 @@ export function ChatList({ messages, isLoading }: { messages: Message[]; isLoadi
   const { isChatLoaderVisible } = useChatLoader({ messages, isLoading });
 
   return (
-    <div className='relative mx-auto max-w-2xl px-4'>
+    <div className='relative mx-auto w-[672px] px-4'>
       {messages.map((message, index) => (
         <div key={message.id}>
           <ChatMessage message={message} />
