@@ -35,13 +35,6 @@ describe('useScrollToBottom', () => {
       result.current.endRef.current = end;
     });
 
-    // act(() => {
-    //   observeMock.mockImplementation(() => {
-    //     return [{ addedNodes: document.createElement('div') }];
-    //   });
-    //   // observeCallback([{ addedNodes: document.createElement('div') }]);
-    // });
-
     waitFor(() => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- ignore
       const observeCallback = observeMock.mock.calls[0][1];
