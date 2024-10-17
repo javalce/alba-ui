@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ALBA
 
-## Getting Started
+This repository contains the code for the user interface of the ALBA project.
 
-First, run the development server:
+## Requirements
+
+- [Node.js](https://nodejs.org/en/)
+- [pnpm](https://pnpm.io/)
+- [Docker](https://www.docker.com/)
+
+## Installation
+
+1. Clone the repository
+2. Run `pnpm install` to install the dependencies
+3. Run `pnpm dev` to start the development server
+4. Open `http://localhost:3000` in your browser
+
+## Environment variables
+
+The project uses the following environment variables:
+
+- `NEXT_PUBLIC_API_URL`: The URL of the API
+- `AUTH_SECRET`: The secret used to sign the JWT tokens. Use `npx auth secret` to generate a new secret.
+- `APP_BASE_PATH`: The base path of the application. This is useful when the application is not hosted in the root of the domain. E.g. `/alba` if the application is hosted in `https://example.com/alba`.
+
+To set the environment variables, create a `.env.development.local` file in the root of the project and add the variables there for the development environment. For the production environment, create a `.env.production.local` file.
+
+> [!NOTE]
+> When using `npx auth secret`, the secret is stored in the `.env.local` file.
+
+## Deployment
+
+To deploy the project, it is provided a `Dockerfile` that builds the project by using `docker-compose`:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+docker-compose up -d --build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Makefile
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The project provides a `Makefile` which simplifies the deployment process. The following commands are available:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- `make up`: Builds the project and starts the containers
+- `make down`: Stops the containers
+- `make build`: Builds the project
+- `make shell`: Opens a shell in the container
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
